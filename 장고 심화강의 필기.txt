@@ -1,0 +1,42 @@
+2. Http Request & Response
+GET : 갖다줘
+POST : 처리해줘
+PUT : 전체 수정
+DELETE : 삭제
+PATCH : 교체 수정
+OPTION : 메소드 종류 확인
+
+http응답
+1xx (정보) : 요청을 받았으며 프로세스를 계속한다.
+2xx (성공) : 요청을 성공적으로 받았으며 인식했고 수용했다.
+3xx (리다이렉션) : 요청 완료를 위해 추가 작업조치가 필요하다.
+4xx (서버 오류) : 서버가 명백히 유효한 요청 충족을 실패했다.
+
+
+2.5 httpie
+
+httpie 명령어의 시작 = http
+형식 : http [flags] [METHOD] URL [ITEM[ITEM]]
+flags = 옵션
+method = post, get delete 등...
+item = 인자
+->post, put 방식으로 요청할 경우 : = 표현 ex)x =a
+->get 방식으로 요청할 경우 : == 표현 ex)x == a (get은 생략해도 무방)
+
+PUT의 경우
+http--json || http--form 두가지 형식이 있음!
+
+3. CBV (1)
+
+views.py는 두가지로 작성 가능
+1.function
+2.class
+->>이 둘은 callable object라는 측면에서 같은 뿌리를 공유하고 있음.
+->>>즉 엄밀히 말하자면 django의 view는 callable object로 정의하기때문에
+
+?그렇다면 function말고 class로 정의하는 이유?
+결정적으로 class에는 상속의 개념이 있기 때문에 == 중복의 제거, 코드의 재사용 가능.
+>>따라서 미리 약속된것들이 많음.
+
+
+
