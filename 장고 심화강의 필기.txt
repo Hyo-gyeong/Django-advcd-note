@@ -104,4 +104,83 @@ ViewSet = View(CRUD)를 설계하는 쉽고 간단한 방법
 APIView -> Mixins -> Generic CBV -> ViewSet : 상속해가며 간단해짐
 
 
+10. ViewSet
+
+내가 임의로 View설계하기, Custom API만들기
+@action()
+ def fun()이용
+
+(*default get방식 처리)
+
+1. Router : 관례적 mapping관계 자동 생성
+
+ViewSet은 필연적으로 (pk값등) 하나의 path함수로는 처리불가.
+
+그래서 서로 다은 (적어도 2개 이상의)path함수들을 묶어주는 과정이 필요
+path(요청을 처리할 url, 요청을 인자로 받아 처리할 함수, namespace)
+==Path함수의 두 번째 인자(로 오는 함수)를 묶기!
+
+두 번째 인자로 올 함수들 (묶어줘야 할 함수들)
+ex)list(), create(), retrieve(), update(), partial_update(), destroy()
+
+>>>as_view가 그 역할을 함
+as_view({'http_method'(가들어오면):'처리할 _함수'(로 처리할꺼야)})
+
+12. pagination
+
+API서버상의 페이지네이션??
+왜 필요하지??
+의의 : 하나의 request만으로 처리하기 어려운 레코드들을 여러 request로 나누어 전송함.
+
+-DRF의 페이지네이션 구현
+by...
+1.PageNumberPagination*(디폴트로 설정)
+2.LimitOffsetPagination
+3.CursorPagination
+------DRF 제공 클래스
+4.CustomizedPagination*(추가적인 page설정이 필요한 부분만)
+
+
+13. filtering and search
+
+Filtering 		VS 		Search
+-Reqeust걸러 보내기	   -Response걸러받기
+
+
+14. Authentication
+
+동작원리  : CRUD
+운영원리 : Authentication & Permission -> 제 3자를 비롯한 모든 사용자에게 동일한 권한을 주지 않음
+Authentication = 서비스를 이용할 때 내가 어느정도의 권한이 있음을 알려주는(요청하는) 과정
+Permission  = 서비스를 어느정도로 이용할 수 있는지에 대한 권한
+
+Authentication 
+-Basic~ : http 자체 기본인증에 기반한 인증방식, http제어 헤더로 넘긴 id, pw를 base64 encoding
+-Token~:http보완, 유일한 key값이용
+-Session:장고 디폴트, 장고가 로그인이 될때마다 생성되는 세션을 참고하여 관리함.
+-RemoteUser~:다른서버에서 관리될 때.
+
+15. permission
+:View호출 시 가장 먼저 체크되고 인증정보(request.user, request.auth)를 기반으로 군한은 체크함.
+-AllowAny
+ : 인증된 요청이든 비인증 요청이든 전부 허용하겠다.
+-IsAuthenticated
+ : 인증된 요청에 대해서만 View 호출을 허용하겠다
+(등록된 사용자에게만 Accesss허용)
+-IsAdminUser
+ : staff user에 대해서만 요청을 허용하겠다
+-IsAuthenticatedOrReadOnly
+ : 비인증 요청은 읽기만 즉 '안전한 http method'만 허용하겠다.
+
+16. token인증
+BasicAuthentication, SessionAuthentication의 한계때문에 생김.
+Mobile Client에 적함함.
+사용단계
+1) username, password 와 1:! 매칭되는 고유 key생성, 발급
+	발급 방법
+	1.rest_framework/authtoken.views.py의 ObtainAuthToken을 이용한 생성
+	2.python 명령어를 통한 생성
+	+ signal을 이용한 token획득
+		: post_save() - DB에 뭔가가 저장된 직후에 특정 동작 수행
+2)발급받는 token을 API요청에 담아 인증처리
 
